@@ -1,0 +1,183 @@
+<!-- This is the hangman game code by Andreas B. , 2016
+The background colours and words-->
+
+
+<html>
+<head>
+<style>
+body{
+	background-color: cyan;
+}
+
+h1 {
+	font-family: 'Courier New';
+	font-size: 48px;
+	text-align: center;
+}
+
+#message {
+	background-color: #111111;
+	color: white;
+	padding: 15px;
+	-webkit-box-shadow: 0px 0px 50px 0px rgba(0,0,0,0.75);
+	text-align: center;
+}
+
+#prompt {
+	text-align: center;
+}
+
+#hangman {
+	margin-left: 45%;
+}
+/* This is the refresh button code*/
+input[type="button"] {
+	width:200px;
+	height:50px;
+	background-color: white;
+	font-size: 32px;
+	text-align: center;
+}
+
+
+/*This is the design */
+
+</style>
+</head>
+
+<body>
+ <h1> HANGMAN </h1>
+<pre id="message" style="font-size: 32px"></pre>
+<pre id="prompt" style="font-size:24px"></pre>
+<pre id="hangman" style="font-size: 32px; display: block;""></pre>
+<input type="button" name="refresh" onclick="window.location.reload()" value="Play again">
+
+
+
+
+</body>
+<script>
+
+//This is the message system
+
+function alert(str) {
+	document.getElementById("message").innerHTML += "<br>" + str; 
+}
+
+function replace(str) {
+	document.getElementById("message").innerHTML = str;
+}
+
+function _prompt(str) {
+	document.getElementById("prompt").innerHTML = str;
+	return prompt();
+}
+
+
+replace("Welcome to my hangman game!")
+var word = _prompt("What phrase would you like to pick?").toUpperCase();
+var blanks = "";
+for (var letter of word) {
+	if (letter === " ") {
+		blanks += " ";
+	} else {
+		blanks += "_"
+	}
+}
+
+var tries = 6
+var guess = ""
+//This is the drawings of hangman.
+var hangmen = [
+`  -|
+   o 
+  \\|/
+   |
+  / \\`,
+`  -|
+   o 
+  \\|/
+   |
+  / `,
+`  -|
+   o 
+  \\|/
+   |
+   `,
+`  -|
+   o 
+  \\|
+   |
+`,
+`  -|
+   o
+   |
+   |
+`,
+`  -|  
+   o`,
+``
+]
+//This is the code that runs the actual game
+while(guess !== word && tries !== 0 && blanks !== word){
+	
+	alert(blanks.split("").join(" "))
+	guess = _prompt("What letter/word would you like to pick?").toUpperCase();
+
+    if(guess.length === 1) {
+    	var correct = false;
+    	for(i of word){
+    		if(guess === i){
+    			correct = true;
+    		}
+    	}   	
+    	if(correct){
+    		blanks = blanks.split("")
+    		for(i in blanks){
+    			if(guess === word[i]){
+    				blanks[i] = guess
+    			}
+    		}
+    		blanks = blanks.join("")
+    		replace("");
+    	} else {
+    		tries--
+			document.getElementById("hangman").innerHTML = hangmen[tries]      	
+    		replace("You are wrong.")
+    		alert("You have " + String(tries) + " left.")
+    	}
+    }else if(guess.length === word.length){
+        if(guess === word){
+        	break;
+        }else{
+        	replace("You are wrong " + String(tries) + " left.")
+			tries--
+			document.getElementById("hangman").innerHTML = hangmen[tries]      	
+
+        }
+    } else{
+    	replace("That is not a valid letter/word.")
+    }
+}
+replace("The word was " + word)
+
+if(tries === 0) {
+	alert("You ran out of tries. Try again.")
+} else {
+	alert("You are right!")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</html>
